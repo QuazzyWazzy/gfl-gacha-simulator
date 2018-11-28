@@ -180,7 +180,7 @@ function getRecipeData(callback)
         if(status == "success")
         {
             recipePool[getRecipe("_")] = JSON.parse(data);
-
+            infoLoaded = true;
             if(callback != null)
                 callback();
         } else     

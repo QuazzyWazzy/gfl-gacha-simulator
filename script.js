@@ -48,8 +48,11 @@ $.get(neo_sp_build_info + "data/json/gun_info_simple", function(data, status)
             }
         });
 
+        $("#main").addClass("main-show");
+        $(".loading").addClass("loading-hide");
         dollDataAcquired = true; 
-    } 
+    } else
+        alert("Error: Cannot Get Doll Information");
 });
 
 // type: 1 (HG), 2 (SMG), 3 (RF), 4 (AR), 5 (MG), 6 (SG)
@@ -81,6 +84,8 @@ $("#loadRecipeInfo").click(function()
     if(dollDataAcquired)
         updateTable();
 });
+
+var infoLoaded = false;
 
 function updateTable()
 {
@@ -134,9 +139,17 @@ function updateTable()
         $("#infoBody").html(body);
         $("#infoBody").toggle();
         $("#infoBody").toggle(500);
+
+        if(!infoLoaded)
+        {
+            infoLoaded = true;
+            $(".loading-info").toggle(200); 
+        }
     } else
     {
         getRecipeData(updateTable);
+        infoLoaded = false;
+        $(".loading-info").toggle(200);
     }
 }
 
@@ -170,7 +183,8 @@ function getRecipeData(callback)
 
             if(callback != null)
                 callback();
-        }             
+        } else     
+            alert("Error: Cannot Get Redcipe Data");                   
     });
 }
 
@@ -276,48 +290,53 @@ function Roll()
 
             $.get(randomURL + request, function(data, status)
             {
-                var numbers = data.split("\n");
-                numbers.pop();
-
-                $.each(numbers, function(i)
+                if(status == "success")
                 {
-                    var n = numbers[i];
-                    var pCount = 0;
-                    var luckyDoll;
+                    var numbers = data.split("\n");
+                    numbers.pop();
 
-                    $.each(r.data, function(j)
+                    $.each(numbers, function(i)
                     {
-                        var cCount = r.data[j].count;
-                        var nCount = pCount + cCount;
-                        
-                        if(n > pCount && n <= nCount)
+                        var n = numbers[i];
+                        var pCount = 0;
+                        var luckyDoll;
+
+                        $.each(r.data, function(j)
                         {
-                            luckyDoll = j;
-                            return false;
-                        }
+                            var cCount = r.data[j].count;
+                            var nCount = pCount + cCount;
+                            
+                            if(n > pCount && n <= nCount)
+                            {
+                                luckyDoll = j;
+                                return false;
+                            }
 
-                        pCount = nCount;
+                            pCount = nCount;
+                        });
+
+                        var dollRolled = r.data[luckyDoll];
+                        var dollInfo = dollData[dollRolled.gun_id.toString()];
+                        
+                        if(getDollRank(dollRolled.gun_id) != 0)
+                        {
+                            var dollRecipe = getRecipe("/");
+
+                            dollRecipe = dollRecipe.slice(0, -2);
+                            dollRolled.recipe = dollRecipe;
+                            dollRolled.tier = getTier();
+
+                            rolls.push(dollRolled);
+                        } else
+                        {
+                            rollAmount = 1;
+                            Roll();
+                        }                                               
                     });
-
-                    var dollRolled = r.data[luckyDoll];
-                    var dollInfo = dollData[dollRolled.gun_id.toString()];
-                    
-                    if(getDollRank(dollRolled.gun_id) != 0)
-                    {
-                        var dollRecipe = getRecipe("/");
-
-                        dollRecipe = dollRecipe.slice(0, -2);
-                        dollRolled.recipe = dollRecipe;
-                        dollRolled.tier = getTier();
-
-                        rolls.push(dollRolled);
-                    } else
-                    {
-                        rollAmount = 1;
-                        Roll();
-                    }                                               
-                });
-                updateRollTable();
+                    updateRollTable();
+                } else
+                    alert("Error: RNG Failed");
+                
             });
             $(".recipeNotFound2").collapse("hide");
         } else

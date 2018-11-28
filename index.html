@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="assets/G&K Icon.gif">
+    <title>Girls Frontline Production Simulator</title>
+
+    <link href="http://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="style.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark shadow">
+      <div class="container-fluid">
+          <button type="button" id="sidebarToggler" class="navbar-toggler max-show" data-toggle="collapse" data-target="#sidebar">
+              <span class="navbar-toggler-icon"></span>
+          </button>             
+          <a class="navbar-brand pl-2" href="#">Girls Frontline Production Simulator</a>   
+      </div> 
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <nav class="col-3 bg-light sidebar collapse show shadow-lg" id="sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column p-3">
+
+              <li>
+                <ul class="nav flex-column">                              
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <img src="assets/Icon_manpower.png" width="24" height="24">
+                        </span>
+                      </div>
+                      <input id="manpower" type="number" class="form-control" value="30" step="100" min="30" max="9999">
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <img src="assets/Icon_ammo.png" width="24" height="24">
+                        </span>
+                      </div>
+                      <input id="ammo" type="number" class="form-control" value="30" step="100" min="30" max="9999">
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <img src="assets/Icon_ration.png" width="24" height="24">
+                        </span>
+                      </div>
+                      <input id="rations" type="number" class="form-control" value="30" step="100" min="30" max="9999">
+                    </div>               
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <img src="assets/Icon_parts.png" width="24" height="24">
+                        </span>
+                      </div>
+                      <input id="parts" type="number" class="form-control" value="30" step="100" min="30" max="9999">
+                    </div>               
+                  </li>                                                           
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="region">Region</label>
+                        </div>
+                      <select class="custom-select custom-select-sm" id="region" disabled>
+                        <option value="EN" selected>EN</option>
+                        <option value="CN">CN</option>
+                        <option value="KR">KR</option>
+                        <option value="TW">TW</option>
+                        <option value="JP">JP</option>
+                      </select>
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="type">Type</label>
+                        </div>
+                      <select class="custom-select custom-select-sm" id="type">
+                        <option value="Normal" selected>Normal Production</option>
+                        <option value="Heavy">Heavy Production</option>
+                      </select>
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="input-group input-group-sm collapse tier">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="tier">Tier</label>
+                        </div>
+                      <select class="custom-select custom-select-sm" id="tier">
+                        <option value="1" selected>1x Contract, 3x Cores</option>
+                        <option value="2">20x Contracts, 5x Cores</option>
+                        <option value="3">50x Contracts, 10x Cores</option>
+                      </select>
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <div class="d-flex">
+                      <div class="btn-toolbar pr-2">
+                        <div class="btn-group" id="rollButtons">
+                          <button class="btn btn-sm btn-outline-secondary collapse roll-collapse" disabled> <img src="assets/Blocks.gif" width="30" height="30">Rolling...</button>
+                          <button class="btn btn-sm btn-outline-secondary roll-collapse collapse show pt-2 pb-2" id="rollOnce">Roll x1</button>
+                          <button class="btn btn-sm btn-outline-secondary roll-collapse collapse show pt-2 pb-2" id="rollTen">Roll x10</button>  
+                          <button class="btn btn-sm btn-outline-secondary roll-collapse collapse show pt-2 pb-2" id="reset">Reset</button>                 
+                        </div>
+                      </div>                 
+                    </div>
+                  </li> 
+                  <li class="nav-item pr-2 pb-2 pt-2">
+                    <div class="collapse recipeNotFound2">
+                        Recipe Not Found
+                      <span data-feather="alert-triangle"></span>
+                    </div>
+                  </li>
+                  <li class="nav-item pr-2 pb-2">
+                    <h5>Popular Recipes</h5>
+                    <div class="shadow p-2" id="popularRecipe">
+                      <div class="table-responsive">
+                        <table class="table table-hover table-dark table-sm">
+                          <thead>
+                            <tr>
+                              <th>Description</th>
+                              <th><img src="assets/Icon_manpower.png" width="24" height="24"></th>
+                              <th><img src="assets/Icon_ammo.png" width="24" height="24"></th>
+                              <th><img src="assets/Icon_ration.png" width="24" height="24"></th>
+                              <th><img src="assets/Icon_parts.png" width="24" height="24"></th>
+                            </tr>
+                          </thead>
+                          <tbody id="popularBody" class="tbody-dark">                                                     
+                          </tbody>
+                        </table>
+                      </div>
+                  </li>                
+                </ul>
+              </li>
+
+            </ul>
+          </div>
+        </nav>
+
+        <div class="col-4 ml-sm-auto contentDiv" id="infoDiv">                
+          <ul class="nav pb-2">
+            <li class="nav-item">
+                <button class="btn btn-sm btn-outline-secondary" id="loadRecipeInfo">
+                  Load Recipe Info
+                  <span data-feather="corner-right-down"></span>
+                </button>
+            </li>
+            <li class="nav-item pl-2 pt-1">
+                <div class="collapse recipeNotFound">
+                  Recipe Not Found
+                  <span data-feather="alert-triangle"></span>
+                </div>
+            </li>                                         
+          </ul>
+
+          <div class="shadow-lg collapse show p-2" id="recipeInfo">            
+            <div class="table-responsive">
+              </div>
+              <a id="total" class="p-1 border-right">-</a>
+              <a id="typeInfo" class="p-1 border-right">-</a>
+              <a id="tierInfo" class="p-1 border-right">-</a>
+              <h4 class="pt-2" id="currentRecipe">0/0/0/0</h4>
+              <h5 class="pl-1 pb-3">Recipe</h5>
+              <table class="table table-hover table-dark table-sm pb-2">
+                <thead>
+                  <tr>
+                    <th class="rank0" colspan="7">Red: Unavailable</th>                  
+                  </tr>        
+                  <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Time</th>
+                    <th>Count</th>
+                    <th>Rate</th>
+                  </tr>
+                </thead>
+                <tbody id="infoBody" class="tbody-dark">                                                          
+                </tbody>
+              </table>
+                   
+          </div>   
+        </div>
+
+        <div class="col-5 contentDiv" id="rollsDiv">
+          <h3 id="rollsText">0 Rolls</h3>
+          <a id="pContracts" class="p-1 border-right">-</a>
+          <a id="qContracts" class="p-1 border-right">-</a>
+          <a id="cores" class="p-1 border-right">-</a>
+          <h4 class="pt-2" id="resources">0/0/0/0</h4>
+          <div class="shadow-lg p-2">
+          <table class="table table-dark table-sm">
+            <tr>
+              <th>Acquired:</th>
+              <th class="rank2" id="rank2">0 ☆☆</th>
+              <th class="rank3" id="rank3">0 ☆☆☆</th>
+              <th class="rank4" id="rank4">0 ☆☆☆☆</th>
+              <th class="rank5" id="rank5">0 ☆☆☆☆☆</th>  
+            </tr>
+            </table>
+            <div class="table-responsive">
+              <table class="table table-hover table-dark table-sm" id="rollsTable">
+                <thead>          
+                  <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Time</th>
+                    <th>Recipe</th>
+                    <th>Tier</th>
+                  </tr>
+                </thead>
+                <tbody id="rollBody" class="tbody-dark">                                                          
+                </tbody>
+              </table>
+            </div>         
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-min.js"><\/script>')</script>
+    <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+    <script src="http://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script src="script.js"></script>
+
+  </body>
+</html>

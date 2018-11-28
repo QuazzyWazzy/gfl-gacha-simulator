@@ -86,6 +86,7 @@ $("#loadRecipeInfo").click(function()
 });
 
 var infoLoaded = false;
+var loadingInfo = false;
 
 function updateTable()
 {
@@ -140,15 +141,15 @@ function updateTable()
         $("#infoBody").toggle();
         $("#infoBody").toggle(500);
 
-        if(!infoLoaded)
+        if(loadingInfo)
         {
-            infoLoaded = true;
+            loadingInfo = false;
             $(".loading-info").toggle(200); 
         }
     } else
     {
         getRecipeData(updateTable);
-        infoLoaded = false;
+        loadingInfo = true;
         $(".loading-info").toggle(200);
     }
 }
@@ -180,7 +181,7 @@ function getRecipeData(callback)
         if(status == "success")
         {
             recipePool[getRecipe("_")] = JSON.parse(data);
-            infoLoaded = true;
+
             if(callback != null)
                 callback();
         } else     

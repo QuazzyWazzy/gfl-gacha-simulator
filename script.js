@@ -378,7 +378,7 @@ function updateRollTable()
         var id = data.gun_id;
         var doll = dollData[id.toString()];
         var recipe = data.recipe;
-        var tier = data.tier
+        var tier = parseInt(data.tier);
 
         row += "<td>" + (i + 1) + "</td>";
         row += "<td>" + id + "</td>";

@@ -14,29 +14,29 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark shadow">
+    <nav class="navbar navbar-dark navbar-expand-lg sticky-top bg-dark shadow">
       <div class="container-fluid">
           <button type="button" id="sidebarToggler" class="navbar-toggler max-show" data-toggle="collapse" data-target="#sidebar">
               <span class="navbar-toggler-icon"></span>
           </button>             
-          <a class="navbar-brand pl-2" href="#">Girls Frontline Production Simulator v1.0</a>   
+          <a class="navbar-brand pl-2" href="#">Girls Frontline Production Simulator</a>   
       </div> 
     </nav>
 
     <div>
       <img class="loading" src="assets/Blocks.gif">
-    </div>>
+    </div>
 
     <div class="container-fluid main animate-bottom" id="main">
       <div class="row">
 
         <nav class="col-3 bg-light sidebar collapse show shadow-lg" id="sidebar">
           <div class="sidebar-sticky">
-            <ul class="nav flex-column p-3">
+            <ul class="nav flex-column p-2 pt-3 pr-3">
 
               <li>
-                <ul class="nav flex-column">                              
-                  <li class="nav-item pr-2 pb-2">
+                <ul class="nav flex-column">                                          
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -46,7 +46,7 @@
                       <input id="manpower" type="number" class="form-control" value="30" step="100" min="30" max="9999">
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -56,7 +56,7 @@
                       <input id="ammo" type="number" class="form-control" value="30" step="100" min="30" max="9999">
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -66,7 +66,7 @@
                       <input id="rations" type="number" class="form-control" value="30" step="100" min="30" max="9999">
                     </div>               
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-3">
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -76,7 +76,7 @@
                       <input id="parts" type="number" class="form-control" value="30" step="100" min="30" max="9999">
                     </div>               
                   </li>                                                           
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                           <label class="input-group-text" for="region">Region</label>
@@ -90,7 +90,7 @@
                       </select>
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                           <label class="input-group-text" for="type">Type</label>
@@ -101,7 +101,7 @@
                       </select>
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="input-group input-group-sm collapse tier">
                         <div class="input-group-prepend">
                           <label class="input-group-text" for="tier">Tier</label>
@@ -113,7 +113,7 @@
                       </select>
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <div class="d-flex">
                       <div class="btn-toolbar pr-2">
                         <div class="btn-group" id="rollButtons">
@@ -124,14 +124,35 @@
                         </div>
                       </div>                 
                     </div>
-                  </li> 
-                  <li class="nav-item pr-2 pb-2 pt-2">
+                  </li>
+                  <li class="nav-item">
+                    <ul class="nav">
+                      <li class="nav-item pb-1">
+                        <button class="btn btn-sm btn-outline-secondary" id="loadRecipeInfo">
+                          Load Recipe Info 
+                          <span data-feather="download"></span>
+                        </button>
+                      </li>
+                      <li class="nav-item pl-1 ">
+                        <div class="collapse loading-info">
+                          <img src="assets/Blocks.gif" width="30" height="30">
+                        </div>
+                      </li>
+                      <li class="nav-item pl-2 pt-1">
+                          <div class="collapse recipeNotFound">
+                            Recipe Not Found
+                            <span data-feather="alert-triangle"></span>
+                          </div>
+                      </li>                                         
+                    </ul>
+                  </li>
+                  <li class="nav-item pb-2 pt-2">
                     <div class="collapse recipeNotFound2">
                         Recipe Not Found
                       <span data-feather="alert-triangle"></span>
                     </div>
                   </li>
-                  <li class="nav-item pr-2 pb-2">
+                  <li class="nav-item pb-2">
                     <h5>Popular Recipes</h5>
                     <div class="shadow p-2" id="popularRecipe">
                       <div class="table-responsive">
@@ -149,7 +170,12 @@
                           </tbody>
                         </table>
                       </div>
-                  </li>                
+                    </li>
+                    <li class="nav-item pt-2 pl-2">
+                      <p>This site uses data from 
+                        <a href="http://gfdb.baka.pw/statistician.html" target="_blank" rel="noopener noreferrer">http://gfdb.baka.pw/statistician.html</a>
+                      </p>                               
+                    </li>                  
                 </ul>
               </li>
 
@@ -157,91 +183,74 @@
           </div>
         </nav>
 
-        <div class="col-4 ml-sm-auto contentDiv" id="infoDiv">                
-          <ul class="nav pb-2">
-            <li class="nav-item">
-                <button class="btn btn-sm btn-outline-secondary" id="loadRecipeInfo">
-                  Load Recipe Info
-                  <span data-feather="corner-right-down"></span>
-                </button>
-            </li>
-            <li class="nav-item pl-2 ">
-              <div class="collapse loading-info">
-                <img src="assets/Blocks.gif" width="30" height="30">
-              </div>
-            </li>
-            <li class="nav-item pl-2 pt-1">
-                <div class="collapse recipeNotFound">
-                  Recipe Not Found
-                  <span data-feather="alert-triangle"></span>
+        <nav class="col-sm-9 col-xs-12 ml-sm-auto contentDiv">
+          <ul class="nav nav-fill">
+            <li class="nav-item pr-2 pb-2">             
+                <div class="shadow collapse show p-2">
+                  <a id="total" class="p-1 border-right">-</a>
+                  <a id="typeInfo" class="p-1 border-right">-</a>
+                  <a id="tierInfo" class="p-1 border-right">-</a>
+                  <h4 class="pt-2" id="currentRecipe">0/0/0/0</h4>
+                  <h5 class="pl-1 pb-3">Recipe</h5>
+                  <div class="table-responsive">                
+                    <table class="table table-hover table-dark table-sm pb-2">
+                      <thead>
+                        <tr>
+                          <th class="rank0" colspan="7">Red: Unavailable</th>                  
+                        </tr>        
+                        <tr>
+                          <th>#</th>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Time</th>
+                          <th>Count</th>
+                          <th>Rate</th>
+                        </tr>
+                      </thead>
+                      <tbody id="infoBody" class="tbody-dark">                                                          
+                      </tbody>
+                    </table> 
+                  </div>                          
                 </div>
-            </li>                                         
-          </ul>
-
-          <div class="shadow-lg collapse show p-2" id="recipeInfo">            
-            <div class="table-responsive">
-              </div>
-              <a id="total" class="p-1 border-right">-</a>
-              <a id="typeInfo" class="p-1 border-right">-</a>
-              <a id="tierInfo" class="p-1 border-right">-</a>
-              <h4 class="pt-2" id="currentRecipe">0/0/0/0</h4>
-              <h5 class="pl-1 pb-3">Recipe</h5>
-              <table class="table table-hover table-dark table-sm pb-2">
-                <thead>
-                  <tr>
-                    <th class="rank0" colspan="7">Red: Unavailable</th>                  
-                  </tr>        
-                  <tr>
-                    <th>#</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Count</th>
-                    <th>Rate</th>
-                  </tr>
-                </thead>
-                <tbody id="infoBody" class="tbody-dark">                                                          
-                </tbody>
-              </table>
-                   
-          </div>   
-        </div>
-
-        <div class="col-5 contentDiv" id="rollsDiv">
-          <h3 id="rollsText">0 Rolls</h3>
-          <a id="pContracts" class="p-1 border-right">-</a>
-          <a id="qContracts" class="p-1 border-right">-</a>
-          <a id="cores" class="p-1 border-right">-</a>
-          <h4 class="pt-2" id="resources">0/0/0/0</h4>
-          <div class="shadow-lg p-2">
-          <table class="table table-dark table-sm">
-            <tr>
-              <th>Acquired:</th>
-              <th class="rank2" id="rank2">0 ☆☆</th>
-              <th class="rank3" id="rank3">0 ☆☆☆</th>
-              <th class="rank4" id="rank4">0 ☆☆☆☆</th>
-              <th class="rank5" id="rank5">0 ☆☆☆☆☆</th>  
-            </tr>
-            </table>
-            <div class="table-responsive">
-              <table class="table table-hover table-dark table-sm" id="rollsTable">
-                <thead>          
-                  <tr>
-                    <th>#</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Recipe</th>
-                    <th>Tier</th>
-                  </tr>
-                </thead>
-                <tbody id="rollBody" class="tbody-dark">                                                          
-                </tbody>
-              </table>
-            </div>         
-          </div>
+              </li>
+              <li class="nav-item">   
+                <div class="shadow p-2">
+                  <h3 id="rollsText">0 Rolls</h3>
+                  <a id="pContracts" class="p-1 border-right">-</a>
+                  <a id="qContracts" class="p-1 border-right">-</a>
+                  <a id="cores" class="p-1 border-right">-</a>
+                  <h4 class="pt-2" id="resources">0/0/0/0</h4>
+                  <table class="table table-dark table-sm">
+                    <tr>
+                      <th>Acquired:</th>
+                      <th class="rank2" id="rank2">0 ☆☆</th>
+                      <th class="rank3" id="rank3">0 ☆☆☆</th>
+                      <th class="rank4" id="rank4">0 ☆☆☆☆</th>
+                      <th class="rank5" id="rank5">0 ☆☆☆☆☆</th>  
+                    </tr>
+                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-hover table-dark table-sm" id="rollsTable">
+                      <thead>          
+                        <tr>
+                          <th>#</th>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Time</th>
+                          <th>Recipe</th>
+                          <th>Tier</th>
+                        </tr>
+                      </thead>
+                      <tbody id="rollBody" class="tbody-dark">                                                          
+                      </tbody>
+                    </table>
+                  </div>
+                </div>           
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

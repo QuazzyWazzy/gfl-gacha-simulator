@@ -198,46 +198,46 @@ function getTier()
 }
 
 // Sidebar Checker
-var maxWidth = 800;
-var isBelowMax = false;
+var minWidth = 575;
+var minNavbarWidth = 430;
+var isBelowMin = false;
 
 setInterval(function(){
 
     var width = $(window).width();
 
-    if(width > maxWidth)
+    if(width >= minWidth)
     {
         if(!$("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
             $("#sidebar").collapse("show");
 
-        if(isBelowMax)
+        if(isBelowMin)
             toggleCol();
            
-        isBelowMax = false;
+        isBelowMin = false;   
 
-    } else if(width <= maxWidth)
+    } else if(width <= minWidth)
     {
-        /*if(!isBelowMax && $("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
-            $("#sidebar").collapse("hide");*/
+        if(!isBelowMin && $("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
+            $("#sidebar").collapse("hide");     
 
-        if(!isBelowMax)
+        if(!isBelowMin)
             toggleCol();
 
-        isBelowMax = true;
+        isBelowMin = true;
+
+        if(width <= minNavbarWidth)
+            $(".navbar-brand").text("Production Simulator");
+        else
+            $(".navbar-brand").text("Girls Frontline Production Simulator");
     }
 
 }, 100);
 
 function toggleCol()
 {
-    $("#infoDiv").toggleClass("col-4");
-    $("#infoDiv").toggleClass("col-5");
-
-    $("#rollsDiv").toggleClass("col-5");
-    $("#rollsDiv").toggleClass("col-7");
-
     $("#sidebar").toggleClass("col-3");
-    $("#sidebar").toggleClass("col-5");
+    $("#sidebar").toggleClass("col-12");
 }
 
 // Tier Toggle

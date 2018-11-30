@@ -186,3 +186,7 @@ color: #FFCD4A;
 .table-acc {
   background-color: #212529;
 }
+
+th[data-sort] {
+  cursor:pointer;
+}

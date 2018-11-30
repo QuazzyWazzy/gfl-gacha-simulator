@@ -19,6 +19,16 @@ function getDollRank(id, rank)
     return 0;
 }
 
+function getDollStars(rank)
+{
+    var stars = "";
+    for(i = 0; i < rank; i++)
+    {
+        stars += "☆";
+    }
+    return stars;
+}
+
 // Load Recipe
 var recipePool = {};
 
@@ -64,8 +74,9 @@ function updateTable()
                 row += "<td>" + (i + 1) + "</td>";
                 row += "<td>" + id + "</td>";
                 row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + doll.name + "</td>";
+                row += "<td class='rank" + doll.rank + "' data-sort-value='" + doll.rank + "'>" + getDollStars(doll.rank) + "</td>";
                 row += "<td>" + getDollType(doll.type) + "</td>";
-                row += "<td>" + parseSeconds(doll.develop_duration) + "</td>";
+                row += "<td data-sort-value='" + doll.develop_duration + "'>" + parseSeconds(doll.develop_duration) + "</td>";
                 row += "<td>" + count + "</td>";
                 row += "<td>" + Math.round(0.00001 + ((count / parseInt(total)) * 100) * 10000) / 10000 + "%</td>";
                 row += "</tr>";
@@ -117,6 +128,17 @@ function getRecipe(divider)
     recipe = recipe.replace(/-/g, divider);
 
     return recipe;
+}
+
+function getRecipeTotal(recipe, splitter)
+{
+    var total = 0;
+    recipe = recipe.split(splitter);
+    $.each(recipe, function(i)
+    {
+        total += parseInt(recipe[i]);
+    });
+    return total;
 }
 
 function getRecipeData(callback)
@@ -262,19 +284,9 @@ function updateRollTable()
 {
     var body = "";
 
-    var pContracts = 0;
-    var qContracts = 0;
-    var cores = 0;
-
-    var manpower = 0;
-    var ammo = 0;
-    var rations = 0;
-    var parts = 0;
-
-    var rank2 = 0;
-    var rank3 = 0;
-    var rank4 = 0;
-    var rank5 = 0;
+    var pContracts = 0, qContracts = 0, cores = 0;
+    var manpower = 0, ammo = 0, rations = 0, parts = 0;
+    var rank2 = 0, rank3 = 0, rank4 = 0, rank5 = 0;
 
     $.each(rolls, function(i)
     {
@@ -288,9 +300,10 @@ function updateRollTable()
         row += "<td>" + (i + 1) + "</td>";
         row += "<td>" + id + "</td>";
         row += "<td class='rank" + doll.rank + "'>" + doll.name + "</td>";
+        row += "<td class='rank" + doll.rank + "' data-sort-value='" + doll.rank + "'>" + getDollStars(doll.rank) + "</td>";
         row += "<td>" + getDollType(doll.type) + "</td>";
-        row += "<td>" + parseSeconds(doll.develop_duration) + "</td>";
-        row += "<td>" + recipe + "</td>";
+        row += "<td data-sort-value='" + doll.develop_duration + "'>" + parseSeconds(doll.develop_duration) + "</td>";
+        row += "<td data-sort-value='" + getRecipeTotal(recipe, "/") + "'>" + recipe + "</td>";
         row += "<td>" + tier + "</td>";
         row += "</tr>";
 
@@ -432,6 +445,7 @@ function parseSeconds(s)
     return hrs + ":" + mins + ":00";
 }
 
+// Table Links and Sorting
 function addTableLinks()
 {
     $("table tr").click(function()
@@ -447,7 +461,47 @@ function addTableLinks()
                 window.location = link;
         }           
     });
+    
+    if(infoCol != undefined)  
+        infoCol.stupidsort(infoDir);      
+    if(rollsCol != undefined)  
+        rollsCol.stupidsort(rollsDir);
 }
+
+var table = $("table").stupidtable();
+var infoCol, infoDir;
+var rollsCol, rollsDir;
+
+table.on("aftertablesort", function (event, data) 
+{
+    var th = $(this).find("th");
+    var id = $(this).attr("id");
+    var offset = 0;
+
+    if(id == "infoTable")
+        offset = 2;
+    if(id == "rollsTable")
+        offset = 6;
+
+    th.find(".arrow").remove();       
+    var dir = $.fn.stupidtable.dir;
+    var arrow = data.direction === dir.ASC ? "up" : "down";
+    var col = th.eq(data.column + offset);
+
+    if(id == "infoTable")
+    {
+        infoCol = col;
+        infoDir = data.direction;
+    }      
+    if(id == "rollsTable")
+    {
+        rollsCol = col;
+        rollsDir = data.direction;
+    }
+
+    col.append("<span class='arrow' data-feather='arrow-" + arrow + "'></span>");
+    feather.replace();
+});
 
 // For some reason some doll IDs are bugged 
 function getID(id)

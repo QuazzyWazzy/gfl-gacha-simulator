@@ -160,10 +160,10 @@
                           <thead>
                             <tr>
                               <th>Description</th>
-                              <th><img src="assets/Icon_manpower.png" width="24" height="24"></th>
-                              <th><img src="assets/Icon_ammo.png" width="24" height="24"></th>
-                              <th><img src="assets/Icon_ration.png" width="24" height="24"></th>
-                              <th><img src="assets/Icon_parts.png" width="24" height="24"></th>
+                              <th data-sort="int"><img src="assets/Icon_manpower.png" width="24" height="24"></th>
+                              <th data-sort="int"><img src="assets/Icon_ammo.png" width="24" height="24"></th>
+                              <th data-sort="int"><img src="assets/Icon_ration.png" width="24" height="24"></th>
+                              <th data-sort="int"><img src="assets/Icon_parts.png" width="24" height="24"></th>
                             </tr>
                           </thead>
                           <tbody id="popularBody" class="tbody-dark">                                                     
@@ -193,23 +193,24 @@
                   <h4 class="pt-2" id="currentRecipe">0/0/0/0</h4>
                   <h5 class="pb-2" id="rInfo">Recipe Info</h5>
                   <div class="table-responsive">                
-                    <table class="table table-hover table-dark table-sm pb-2">
+                    <table class="table table-hover table-dark table-sm table-bordered pb-2" id="infoTable">
                       <thead>
                         <tr>
                           <th>
                             <tr>
-                              <th class="rank0" colspan="7">Red: Unavailable</th>
+                              <th class="rank0" colspan="8">Red: Unavailable</th>
                             </tr>
                           </th>                  
                         </tr>        
                         <tr>
-                          <th>#</th>
-                          <th>ID</th>
-                          <th>Name</th>
-                          <th>Type</th>
-                          <th>Time</th>
-                          <th>Count</th>
-                          <th>Rate</th>
+                          <th data-sort="int">#</th>
+                          <th data-sort="int">ID</th>
+                          <th data-sort="string">Name</th>
+                          <th data-sort="int">Rarity</th>
+                          <th data-sort="string">Type</th>
+                          <th data-sort="int">Time</th>
+                          <th data-sort="int">Count</th>
+                          <th data-sort="float">Rate</th>
                         </tr>
                       </thead>
                       <tbody id="infoBody" class="tbody-dark">                                                          
@@ -229,7 +230,7 @@
                     <table class="table table-hover table-dark table-sm" id="rollsTable">
                       <thead>
                         <tr>
-                          <th colspan="7">
+                          <th colspan="8">
                             <table class="table table-borderless">
                               <tbody class="table-acc">
                                 <tr>
@@ -244,13 +245,14 @@
                           </th>
                         </tr>          
                         <tr>
-                          <th>#</th>
-                          <th>ID</th>
-                          <th>Name</th>
-                          <th>Type</th>
-                          <th>Time</th>
-                          <th>Recipe</th>
-                          <th>Tier</th>
+                          <th data-sort="int">#</th>
+                          <th data-sort="int">ID</th>
+                          <th data-sort="string">Name</th>
+                          <th data-sort="int">Rarity</th>
+                          <th data-sort="string">Type</th>
+                          <th data-sort="int">Time</th>
+                          <th data-sort="int">Recipe</th>
+                          <th data-sort="int">Tier</th>
                         </tr>
                       </thead>
                       <tbody id="rollBody" class="tbody-dark">                                                          
@@ -272,9 +274,11 @@
 
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
-      feather.replace()
+      feather.replace();
     </script>
 
+    <script src="assets/js/vendor/stupidtable.min.js"></script>
+    
     <script src="DollData.js"></script>
     <script src="script.js"></script>
 

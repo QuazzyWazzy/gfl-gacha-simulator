@@ -1,60 +1,3 @@
-// Source
-var sp_build_info = "http://gfdb.baka.pw/";
-var neo_sp_build_info = "https://ipick.baka.pw:444/";
-
-// Doll Data
-var dollData = {};
-var dollDataAcquired = false;
-
-// Regions
-var regions = 
-{
-    EN: [[1, 3], [5, 27], [29], [31, 44], [46, 48], [50, 58], [60, 72], [74, 75], [77, 101], [103, 112], [114, 133], [135], [138, 144], [148, 149], [153, 159], [161], [166], [168], [170, 171], [173], [175], [183], [188, 190], [192], [196], [1001, 1002]],
-    CN: [],
-    KR: [],
-    TW: [],
-    JP: []
-}
-
-$.get(neo_sp_build_info + "data/json/gun_info_simple", function(data, status)
-{
-    if(status == "success")
-    {
-        $.each(data, function(i)
-        {
-            var doll = data[i];
-            var id = doll.id;
-            delete doll.id;
-            doll.region = { EN: false };
-            dollData[id.toString()] = doll;
-        });
-
-        $.each(regions.EN, function(i)
-        {
-            var id = regions.EN[i];
-
-            if(id.length < 2)
-            {
-                if(dollData[id[0].toString()] != undefined)
-                    dollData[id[0].toString()].region.EN = true;
-            }             
-            else
-            {
-                for(j = id[0]; j <= id[1]; j++)
-                {
-                    if(dollData[j.toString()] != undefined)
-                        dollData[j.toString()].region.EN = true;
-                }
-            }
-        });
-
-        $("#main").addClass("main-show");
-        $(".loading").addClass("loading-hide");
-        dollDataAcquired = true; 
-    } else
-        alert("Error: Cannot Get Doll Information");
-});
-
 // type: 1 (HG), 2 (SMG), 3 (RF), 4 (AR), 5 (MG), 6 (SG)
 function getDollType(type)
 {
@@ -101,6 +44,7 @@ function updateTable()
         $("#total").text("Total : " + total);
         $("#typeInfo").text($("#type").val() + " Production");
         $("#tierInfo").text("Tier " + getTier());
+        $("#rInfo").text("Recipe Info (" + $("#region").val() + ")");
 
         var cRecipe = getRecipe("/");
         cRecipe = cRecipe.slice(0, -2);
@@ -111,15 +55,15 @@ function updateTable()
         if(total > 0)
         {
             $.each(data, function(i)
-            {
-                var row = "<tr>";
-                var id = data[i].gun_id;
+            {          
+                var id = getID(data[i].gun_id);                  
                 var count = data[i].count;
                 var doll = dollData[id.toString()];
+                var row = "<tr href='" + wikiURL + doll.name.replace(" ", "_") + "'>";
 
                 row += "<td>" + (i + 1) + "</td>";
                 row += "<td>" + id + "</td>";
-                row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + doll.code + "</td>";
+                row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + doll.name + "</td>";
                 row += "<td>" + getDollType(doll.type) + "</td>";
                 row += "<td>" + parseSeconds(doll.develop_duration) + "</td>";
                 row += "<td>" + count + "</td>";
@@ -146,6 +90,9 @@ function updateTable()
             loadingInfo = false;
             $(".loading-info").toggle(200); 
         }
+
+        collapseAndScroll("#infoDiv");
+        addTableLinks();
     } else
     {
         getRecipeData(updateTable);
@@ -195,49 +142,6 @@ function getTier()
         return 0;
     else
         return $("#tier").val();
-}
-
-// Sidebar Checker
-var minWidth = 575;
-var minNavbarWidth = 430;
-var isBelowMin = false;
-
-setInterval(function(){
-
-    var width = $(window).width();
-
-    if(width >= minWidth)
-    {
-        if(!$("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
-            $("#sidebar").collapse("show");
-
-        if(isBelowMin)
-            toggleCol();
-           
-        isBelowMin = false;   
-
-    } else if(width <= minWidth)
-    {
-        if(!isBelowMin && $("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
-            $("#sidebar").collapse("hide");     
-
-        if(!isBelowMin)
-            toggleCol();
-
-        isBelowMin = true;
-
-        if(width <= minNavbarWidth)
-            $(".navbar-brand").text("Production Simulator");
-        else
-            $(".navbar-brand").text("Girls Frontline Production Simulator");
-    }
-
-}, 100);
-
-function toggleCol()
-{
-    $("#sidebar").toggleClass("col-3");
-    $("#sidebar").toggleClass("col-12");
 }
 
 // Tier Toggle
@@ -317,7 +221,7 @@ function Roll()
                         });
 
                         var dollRolled = r.data[luckyDoll];
-                        var dollInfo = dollData[dollRolled.gun_id.toString()];
+                        var dollInfo = dollData[getID(dollRolled.gun_id).toString()];
                         
                         if(getDollRank(dollRolled.gun_id) != 0)
                         {
@@ -339,7 +243,7 @@ function Roll()
                     alert("Error: RNG Failed");
                 
             });
-            $(".recipeNotFound2").collapse("hide");
+            $(".recipeNotFound2").collapse("hide");           
         } else
         {
             $(".recipeNotFound2").collapse("show");
@@ -374,16 +278,16 @@ function updateRollTable()
 
     $.each(rolls, function(i)
     {
-        var row = "<tr>";
         var data = rolls[i];
-        var id = data.gun_id;
+        var id = getID(data.gun_id);
         var doll = dollData[id.toString()];
         var recipe = data.recipe;
         var tier = parseInt(data.tier);
+        var row = "<tr href='" + wikiURL + doll.name.replace(" ", "_") + "'>";
 
         row += "<td>" + (i + 1) + "</td>";
         row += "<td>" + id + "</td>";
-        row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + doll.code + "</td>";
+        row += "<td class='rank" + doll.rank + "'>" + doll.name + "</td>";
         row += "<td>" + getDollType(doll.type) + "</td>";
         row += "<td>" + parseSeconds(doll.develop_duration) + "</td>";
         row += "<td>" + recipe + "</td>";
@@ -437,9 +341,15 @@ function updateRollTable()
 
     if(rolls.length == totalRolls)
     {
-        if(totalRolls > 0)
-            $(".roll-collapse").toggle(200);
         $("#rollsText").text(rolls.length + " Rolls");
+
+        if(totalRolls > 0)
+            $(".roll-collapse").toggle(200); 
+            
+        $("#rollBody").toggle();
+        $("#rollBody").toggle(500);
+        
+        collapseAndScroll("#rollsDiv");
     }
 
     for(i = 2; i <= 5; i++)
@@ -448,6 +358,8 @@ function updateRollTable()
         h[0] = eval("rank" + i);
         $("#rank" + i).html(h[0] + " " + h[1]);
     }
+
+    addTableLinks();
 }
 
 // Popular Recipes
@@ -518,4 +430,88 @@ function parseSeconds(s)
         hrs = "0" + hrs;
 
     return hrs + ":" + mins + ":00";
+}
+
+function addTableLinks()
+{
+    $("table tr").click(function()
+    {
+        var link = $(this).attr('href');
+        if(link != undefined)
+        {
+            var w = window.open(link, "_blank");
+
+            if(w)
+                w.focus();
+            else
+                window.location = link;
+        }           
+    });
+}
+
+// For some reason some doll IDs are bugged 
+function getID(id)
+{
+    if(id == 9034)             
+        id = 206;
+    if(id == 9035)
+        id = 205;
+    if(id > 1010)
+        console.log(id); 
+    return id;
+}
+
+// Sidebar
+var minWidth = 575;
+var minNavbarWidth = 430;
+var isBelowMin = false;
+
+$(".navbar-brand").addClass("navbar-brand-show");
+
+setInterval(function(){
+
+    var width = $(window).width();
+
+    if(width >= minWidth)
+    {
+        if(!$("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
+            $("#sidebar").collapse("show");
+
+        if(isBelowMin)
+            toggleCol();
+           
+        isBelowMin = false;   
+
+    } else if(width <= minWidth)
+    {
+        if(!isBelowMin && $("#sidebar").hasClass("collapse show") && !$("#sidebar").hasClass("collapsing"))
+            $("#sidebar").collapse("hide");     
+
+        if(!isBelowMin)
+            toggleCol();
+
+        isBelowMin = true;       
+    }
+
+    if(width <= minNavbarWidth)
+        $(".navbar-brand").text("Production Simulator");
+    else
+        $(".navbar-brand").text("Girls Frontline Production Simulator");
+
+}, 100);
+
+function toggleCol()
+{
+    $("#sidebar").toggleClass("col-3");
+    $("#sidebar").toggleClass("col-12");
+}
+
+var scrollOffset = -60;
+
+function collapseAndScroll(div)
+{
+    if(isBelowMin)    
+        $("#sidebar").collapse("hide");
+    
+    $("html, body").animate({ scrollTop: $(div).offset().top + scrollOffset }, 1000);
 }

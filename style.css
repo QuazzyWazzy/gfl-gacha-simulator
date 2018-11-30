@@ -2,14 +2,6 @@ body {
   font-size: .8rem;
 }
 
-.main {
-  display: none;
-}
-
-.main-show {
-  display: block;
-}
-
 /*
 table {
   max-height: 60vh;
@@ -93,6 +85,18 @@ table {
   min-width: 300px;
 }
 
+.navbar-brand {
+  opacity: 0;
+}
+
+.navbar-brand-show {
+  opacity: 1;
+  transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+}
+
 .navbar .form-control {
 padding: .75rem 1rem;
 border-width: 0;
@@ -128,6 +132,14 @@ color: #D6E35A;
 
 .rank5 {
 color: #FFCD4A;
+}
+
+.main {
+  display: none;
+}
+
+.main-show {
+  display: block;
 }
 
 .animate-bottom {
@@ -169,4 +181,8 @@ color: #FFCD4A;
 
 .contentDiv {
   padding-top: 10px;
+}
+
+.table-acc {
+  background-color: #212529;
 }

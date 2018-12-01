@@ -12,6 +12,7 @@ function getDollType(type)
     }
 }
 
+// Rank and Stars
 function getDollRank(id, rank)
 {
     if(dollData[id.toString()].region[$("#region").val()])
@@ -27,6 +28,33 @@ function getDollStars(rank)
         stars += "☆";
     }
     return stars;
+}
+
+// Wiki URLs
+var EN_wikiURL = "https://en.gfwiki.com/wiki/";
+var JP_wikiURL = "https://wikiwiki.jp/dolls-fl/";
+
+function getDollURL(dollName)
+{
+    var r = $("#region").val();
+
+    if(r == "JP")
+        return JP_wikiURL + dollName;
+        
+    return EN_wikiURL + dollName.replace(" ", "_");
+}
+
+// Doll Names
+
+function getDollName(id)
+{
+    id = id.toString();
+    var name = dollNames[$("#region").val()][id];
+
+    if(name == undefined)
+        return dollNames.EN[id];
+
+    return name;
 }
 
 // Load Recipe
@@ -69,11 +97,11 @@ function updateTable()
                 var id = getID(data[i].gun_id);                  
                 var count = data[i].count;
                 var doll = dollData[id.toString()];
-                var row = "<tr href='" + wikiURL + doll.name.replace(" ", "_") + "'>";
+                var row = "<tr href='" + getDollURL(getDollName(id)) + "'>";
 
                 row += "<td>" + (i + 1) + "</td>";
                 row += "<td>" + id + "</td>";
-                row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + doll.name + "</td>";
+                row += "<td class='rank" + getDollRank(id, doll.rank) + "'>" + getDollName(id) + "</td>";
                 row += "<td class='rank" + doll.rank + "' data-sort-value='" + doll.rank + "'>" + getDollStars(doll.rank) + "</td>";
                 row += "<td>" + getDollType(doll.type) + "</td>";
                 row += "<td data-sort-value='" + doll.develop_duration + "'>" + parseSeconds(doll.develop_duration) + "</td>";
@@ -295,11 +323,11 @@ function updateRollTable()
         var doll = dollData[id.toString()];
         var recipe = data.recipe;
         var tier = parseInt(data.tier);
-        var row = "<tr href='" + wikiURL + doll.name.replace(" ", "_") + "'>";
+        var row = "<tr href='" + getDollURL(getDollName(id)) + "'>";
 
         row += "<td>" + (i + 1) + "</td>";
         row += "<td>" + id + "</td>";
-        row += "<td class='rank" + doll.rank + "'>" + doll.name + "</td>";
+        row += "<td class='rank" + doll.rank + "'>" + getDollName(id) + "</td>";
         row += "<td class='rank" + doll.rank + "' data-sort-value='" + doll.rank + "'>" + getDollStars(doll.rank) + "</td>";
         row += "<td>" + getDollType(doll.type) + "</td>";
         row += "<td data-sort-value='" + doll.develop_duration + "'>" + parseSeconds(doll.develop_duration) + "</td>";

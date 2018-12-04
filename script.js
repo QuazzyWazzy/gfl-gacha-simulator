@@ -33,19 +33,26 @@ function getDollStars(rank)
 // Wiki URLs
 var EN_wikiURL = "https://en.gfwiki.com/wiki/";
 var JP_wikiURL = "https://wikiwiki.jp/dolls-fl/";
+var CN_wikiURL = "https://zh.moegirl.org/少女前线:";
+var KR_wikiURL = "http://gfl.zzzzz.kr/doll.php?id=";
+var TW_wikiURL = "https://gf.fws.tw/db/guns/info/"
 
-function getDollURL(dollName)
+function getDollURL(id)
 {
     var r = $("#region").val();
+    var name = getDollName(id);
 
-    if(r == "JP")
-        return JP_wikiURL + dollName;
-        
-    return EN_wikiURL + dollName.replace(" ", "_");
+    switch(r)
+    {
+        case "JP": return JP_wikiURL + name;
+        case "CN": return CN_wikiURL + name.replace(" ", "_");
+        case "KR": return KR_wikiURL + id;
+        case "TW": return TW_wikiURL + id;
+        default: return EN_wikiURL + name.replace(" ", "_");
+    }
 }
 
 // Doll Names
-
 function getDollName(id)
 {
     id = id.toString();
@@ -55,6 +62,18 @@ function getDollName(id)
         return dollNames.EN[id];
 
     return name;
+}
+
+// For some reason some doll IDs are bugged 
+function getID(id)
+{
+    if(id == 9034)             
+        id = 206;
+    if(id == 9035)
+        id = 205;
+    //if(id > 1010)
+        //console.log(id); 
+    return id;
 }
 
 // Load Recipe
@@ -97,7 +116,7 @@ function updateTable()
                 var id = getID(data[i].gun_id);                  
                 var count = data[i].count;
                 var doll = dollData[id.toString()];
-                var row = "<tr href='" + getDollURL(getDollName(id)) + "'>";
+                var row = "<tr href='" + getDollURL(id) + "'>";
 
                 row += "<td>" + (i + 1) + "</td>";
                 row += "<td>" + id + "</td>";
@@ -323,7 +342,7 @@ function updateRollTable()
         var doll = dollData[id.toString()];
         var recipe = data.recipe;
         var tier = parseInt(data.tier);
-        var row = "<tr href='" + getDollURL(getDollName(id)) + "'>";
+        var row = "<tr href='" + getDollURL(id) + "'>";
 
         row += "<td>" + (i + 1) + "</td>";
         row += "<td>" + id + "</td>";
@@ -530,18 +549,6 @@ table.on("aftertablesort", function (event, data)
     col.append("<span class='arrow' data-feather='arrow-" + arrow + "'></span>");
     feather.replace();
 });
-
-// For some reason some doll IDs are bugged 
-function getID(id)
-{
-    if(id == 9034)             
-        id = 206;
-    if(id == 9035)
-        id = 205;
-    if(id > 1010)
-        console.log(id); 
-    return id;
-}
 
 // Sidebar
 var minWidth = 575;
